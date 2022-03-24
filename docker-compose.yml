@@ -1,0 +1,60 @@
+version: '3'
+services:
+  
+  nodejs-server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    container_name: node-api
+    volumes:
+       - ./server:/usr/src/app/api
+       - /usr/src/app/api/node_modules
+    depends_on:
+      - db
+    networks:
+      - nodenet
+  
+
+  react-ui:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    container_name: react-ui
+    volumes:
+       - ./client:/usr/src/app/my-app
+       - /usr/src/app/my-app/node_modules
+    networks:
+      - nodenet
+
+  db:
+    image: mysql:8.0.28
+    container_name: db
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: "db"
+      MYSQL_ROOT_PASSWORD: "toor"
+      MYSQL_DATABASE: "ecom_"
+    volumes:
+      - ./docker-compose/mysql:/docker-entrypoint-initdb.d
+    networks:
+      - nodenet
+
+
+  1337server:
+    image: mendhak/http-https-echo
+    container_name: attacker-server
+    restart: unless-stopped
+    ports:
+      - "1337:80"
+    networks:
+      - nodenet
+
+networks:
+  nodenet:
+    driver: bridge
