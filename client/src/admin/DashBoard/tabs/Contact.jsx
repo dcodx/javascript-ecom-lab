@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import axios from '../../axios'
 
+
+
+
 export default function Contact() {
 
   const [contacts, setContacts] = useState([])
-
+  const divRef = React.useRef(null);
   useEffect(() => {
     const getContacts = async () => {
       const { data } = await axios.get('/contacts')
@@ -14,7 +17,13 @@ export default function Contact() {
     getContacts()
   }, [])
 
-
+  
+    function handleSubmit(email, e) {
+      e.preventDefault();
+    
+      divRef.current.innerHTML = "Removed: " + email;
+    }
+  
   return (
     <div>
       {
@@ -39,12 +48,14 @@ export default function Contact() {
                       <td>{contact.id}</td>
                       <td>{contact.firstname}</td>
                       <td>{contact.lastname}</td>
-                      <td>{contact.email}</td>
+                      <td><a  >{contact.email}</a></td>
                       <td>{contact.subject}</td>
                       <td>{contact.message}</td>
+                      <td><button onClick={(e) => handleSubmit(contact.email, e)} >Delete</button></td>
                     </tr>
                   ))
                 }
+                <div ref={divRef}></div>
               </tbody>
             </table>
 

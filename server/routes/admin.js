@@ -23,7 +23,7 @@ const Contact = db.contacts
 function image_exists(url) {
 
     needle.get(url, { timeout: 3000 }, function(error, response) {
-      if (!error && response.statusCode == 200) {
+      if (!error ) {
         console.log(response.body);
         response.end();
       } else {

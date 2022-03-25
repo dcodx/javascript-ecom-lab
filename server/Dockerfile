@@ -8,7 +8,7 @@ ENV PATH /usr/src/app/api/node_modules/.bin:$PATH
 COPY package.json ./
 COPY package-lock.json ./
 
-RUN npm install -g
+RUN npm install
 
 EXPOSE 5000
 
