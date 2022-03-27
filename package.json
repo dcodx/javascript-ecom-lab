@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "node-libcurl": "^2.3.4"
+  }
+}

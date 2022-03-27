@@ -34,8 +34,8 @@ services:
     image: mysql:8.0.28
     container_name: db
     restart: unless-stopped
-    ports:
-      - "3306:3306"
+    #ports:
+    #  - "3306:3306"
     environment:
       MYSQL_DATABASE: "db"
       MYSQL_ROOT_PASSWORD: "toor"
@@ -44,6 +44,7 @@ services:
       - ./docker-compose/mysql:/docker-entrypoint-initdb.d
     networks:
       - nodenet
+
 
 
   1337server:

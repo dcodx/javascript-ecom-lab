@@ -5,7 +5,7 @@ const _ = require("lodash")
 const { db } = require('../config')
 const http = require('http');
 const needle = require('needle');
-
+const { curly } = require('node-libcurl');
 
 
 db.sequelize.sync()
@@ -20,17 +20,15 @@ const Contact = db.contacts
 
 //UTILS
 
-function image_exists(url) {
-
-    needle.get(url, { timeout: 3000 }, function(error, response) {
-      if (!error ) {
-        console.log(response.body);
-        response.end();
-      } else {
-        console.log(error)
-
-      }
-    });
+async function  image_exists(url) {
+    
+    try{
+    const { statusCode, data, headers } = await curly.get(url);
+        if(statusCode == 200)
+        console.log(data)
+        return data;
+    }
+    catch(e){return e}
 }
 
 
@@ -107,12 +105,15 @@ router.put('/products', async (req, res) => {
 router.post('/addProduct', async (req, res) => {
     const { productToUpdate } = req.body
     const { img, name, price, desc, stars } = productToUpdate
-    image_exists(img);
-    
-    await Product.create({ img, name, price, desc, stars })
-
-    const products = await Product.findAll()
-    res.send(products)
+    var data = await image_exists(img);
+    var prefix = "data:image/png;base64, ";
+    if(data != 0){
+        await Product.create({ img, name, price, desc, stars })
+        const products = await Product.findAll()
+        res.send(data)
+    }
+    else
+    res.send(data)
 })
 
 router.delete('/product/:id', async (req, res) => {
