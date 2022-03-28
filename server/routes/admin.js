@@ -20,12 +20,18 @@ const Contact = db.contacts
 
 //UTILS
 
-async function  image_exists(url) {
+async function image_exists(url) {
     
     try{
+
+        let domain = (new URL(url)).hostname;
+        let protocol =(new URL(url)).protocol;
+        console.log(domain) 
+        if(domain == "localhost" || domain == "127.0.0.1" || domain == "0.0.0.0" ||protocol == "file:" )
+            return "domain or protocol not allowed"
     const { statusCode, data, headers } = await curly.get(url);
         if(statusCode == 200)
-        console.log(data)
+        //console.log(data)
         return data;
     }
     catch(e){return e}

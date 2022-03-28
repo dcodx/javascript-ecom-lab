@@ -18,10 +18,13 @@ export default function Contact() {
   }, [])
 
   
-    function handleSubmit(email, e) {
+    function handleSubmit(id,email, e) {
       e.preventDefault();
-    
+      
+      //contacts = callRemoveApi(id)
       divRef.current.innerHTML = "Removed: " + email;
+      
+      
     }
   
   return (
@@ -29,6 +32,7 @@ export default function Contact() {
       {
         contacts.length
           ? <div className="table-responsive">
+            <div ref={divRef}></div>
             <table className="table">
               <thead>
                 <tr>
@@ -51,11 +55,11 @@ export default function Contact() {
                       <td><a  >{contact.email}</a></td>
                       <td>{contact.subject}</td>
                       <td>{contact.message}</td>
-                      <td><button onClick={(e) => handleSubmit(contact.email, e)} >Delete</button></td>
+                      <td><button onClick={(e) => handleSubmit(contact.id, contact.email, e)} >Hide</button></td>
                     </tr>
                   ))
                 }
-                <div ref={divRef}></div>
+                
               </tbody>
             </table>
 
