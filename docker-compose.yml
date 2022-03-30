@@ -8,6 +8,7 @@ services:
     ports:
       - "5000:5000"
     container_name: node-api
+    restart: always
     volumes:
        - ./server:/usr/src/app/api
        - /usr/src/app/api/node_modules

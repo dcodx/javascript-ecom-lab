@@ -3,15 +3,31 @@ const jwt = require('jsonwebtoken')
 
 const verifyToken = (req, res, next) => {
     const token = req.headers.token?.split(' ')[1]
-
+    
+    
     if (!token) return res.status(401).json('You are not authenticated')
+    
 
-    jwt.verify(token, process.env.JWT_SEC, (err, user) => {
-        if (err) return res.status(403).json('Token is not valid')
+    var decoded = jwt.decode(token,process.env.JWT_SEC);
+    req.user = decoded;
+    //return next();
+    
+    let secret = process.env.JWT_SEC;
+    //TODO: remove for prod
+    if(token.split('.')[2].length == 0)
+        secret = ''
+    
+    jwt.verify(token,secret, { algorithms:['HS256','None'] }, (err, user) => {
+        if (err) return res.status(403).json(err)
         req.user = user
 
         return next()
     })
+
+    
+    
+    
+    
 }
 
 

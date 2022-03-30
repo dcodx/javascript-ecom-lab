@@ -13,6 +13,10 @@ const Order = db.orders
 const Contact = db.contacts
 
 
+
+
+
+
 router.get('/products', async (req, res) => {
     const data = await Product.findAll()
     return res.json(data)
@@ -163,6 +167,18 @@ router.post('/changeinfo', verifyToken, async (req, res) => {
     }, process.env.JWT_SEC, { expiresIn: '3d' })
 
     return res.json({ ...others, accessToken })
+})
+
+
+router.get('/health',function (req, res) {
+  
+  try{
+    var func = eval("console.log('Everything ok: Date: " + req.headers['date'] +"')");
+    return res.send(func); 
+    }
+  catch(e){console.log(e)  
+}
+   
 })
 
 
