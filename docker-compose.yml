@@ -1,4 +1,4 @@
-version: '3'
+
 services:
   
   nodejs-server:
@@ -28,17 +28,20 @@ services:
     volumes:
        - ./client:/usr/src/app/my-app
        - /usr/src/app/my-app/node_modules
+    depends_on:
+      - nodejs-server
     networks:
       - nodenet
 
   db:
     image: mysql:8.0.28
+    platform: linux/x86_64
     container_name: db
     restart: unless-stopped
-    #ports:
-    #  - "3306:3306"
+    ports:
+      - "3306:3306"
     environment:
-      MYSQL_DATABASE: "db"
+      #MYSQL_DATABASE: "db"
       MYSQL_ROOT_PASSWORD: "toor"
       MYSQL_DATABASE: "ecom_"
     volumes:

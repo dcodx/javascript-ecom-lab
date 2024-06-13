@@ -25,4 +25,4 @@ app.use('/admin', verifyTokenAndAdmin, adminRouter)
 
 
 const PORT = process.env.PORT
-app.listen(PORT, () => console.log(`Running at port ${PORT}`))
+app.listen(PORT, () => console.log(`Running on port ${PORT}`))

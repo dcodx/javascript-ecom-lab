@@ -8,6 +8,8 @@ const Contact = require("./Models/Contact")
 
 require('dotenv').config()
 
+console.log('Dialect:', process.env.DB_DIALECT);
+
 const
     database = process.env.DB_NAME,
     username = process.env.DB_USERNAME,
@@ -38,7 +40,6 @@ let conn
 db.Sequelize = Sequelize
 db.sequelize = sequelize
 
-
 db.products = Product(sequelize, Sequelize)
 db.reviews = Review(sequelize, Sequelize)
 db.users = User(sequelize, Sequelize)
@@ -47,13 +48,20 @@ db.contacts = Contact(sequelize, Sequelize)
 
 
 
-mysql.createConnection({ user: username, password: password, host: host })
-    .then((connection) => {
-        conn = connection
-        connection.query(`CREATE DATABASE IF NOT EXISTS ${database}`)
-    })
-    .then(() => conn.end())
-    .catch(err => console.warn(err.stack))
+async function connectToDatabase() {
+    try {
+        conn = await mysql.createConnection({ user: username, password: password, host: host });
+        await conn.query(`CREATE DATABASE IF NOT EXISTS ${database}`);
+        console.log('Connected to database, starting application...');
+    } catch (err) {
+        console.error('Error connecting to database, retrying in 5 seconds...', err);
+        if (conn) {
+            conn.end();
+        }
+        setTimeout(connectToDatabase, 5000);
+    }
+}
 
+connectToDatabase();
 
 module.exports = { db, username, password, database }

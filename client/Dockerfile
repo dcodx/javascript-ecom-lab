@@ -6,6 +6,7 @@ WORKDIR /usr/src/app/my-app
 COPY package.json ./
 COPY package-lock.json ./
 
+
 RUN npm install --silent
 
 EXPOSE 3000
