@@ -25,7 +25,7 @@ router.get('/products', async (req, res) => {
 router.post('/search', async (req, res) => {
     const { query } = req.body
     try{
-        const [results, metadata] = await db.sequelize.query(`SELECT * FROM products WHERE products.name LIKE '%${query}%' OR products.desc LIKE '%${query}%'`)
+        const [results, metadata] = await db.sequelize.query(`SELECT * FROM products WHERE products.name LIKE '%${query}%' OR products.desc LIKE '%${query}% OR products.name LIKE'%${query}%'`)
         return res.json(results)
     }
     catch(e){
@@ -132,7 +132,6 @@ router.post('/changepass', verifyToken, async (req, res) => {
 
     const user = await User.findByPk(id)
 
-    if (confirmNewPass !== newPass) return res.send('incorrect')
 
     bcrypt.compare(currentPass, user.password, async (err, result) => {
         if (!result) return res.send('incorrect')
