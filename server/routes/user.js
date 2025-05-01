@@ -132,7 +132,6 @@ router.post('/changepass', verifyToken, async (req, res) => {
 
     const user = await User.findByPk(id)
 
-    if (confirmNewPass !== newPass) return res.send('incorrect')
 
     bcrypt.compare(currentPass, user.password, async (err, result) => {
         if (!result) return res.send('incorrect')
